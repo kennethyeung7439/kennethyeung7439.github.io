@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ken — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14171c;
+    --surface: #1d232b;
+    --surface-hi: #262e38;
+    --line: #323b47;
+    --text: #e7e4dc;
+    --muted: #8b92a3;
+    --copper: #d98e4a;
+    --teal: #5fb89c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* ---------- layout shell with trace line ---------- */
+  .trace {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 28px;
+    height: 100%;
+    border-right: 1px solid var(--line);
+    z-index: 0;
+  }
+  .trace::before {
+    content: "";
+    position: absolute;
+    left: -3px;
+    top: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--copper);
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px 80px 56px;
+  }
+
+  /* ---------- header ---------- */
+  header {
+    padding: 80px 0 48px;
+  }
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--copper);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .tagline {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 520px;
+  }
+  .links {
+    margin-top: 24px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    padding: 8px 14px;
+    border-radius: 4px;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .links a:hover {
+    border-color: var(--copper);
+    color: var(--copper);
+  }
+
+  /* ---------- section markers ---------- */
+  section {
+    position: relative;
+    padding: 56px 0;
+    border-top: 1px solid var(--line);
+  }
+  section::before {
+    content: "";
+    position: absolute;
+    left: -56px;
+    top: 56px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--muted);
+  }
+  section.active-marker::before,
+  section:hover::before {
+    border-color: var(--teal);
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  p { color: var(--text); }
+  .about p + p { margin-top: 12px; }
+
+  /* ---------- project cards ---------- */
+  .project {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: border-color 0.15s ease;
+  }
+  .project:hover {
+    border-color: var(--copper);
+  }
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .project-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .status {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .status.complete { color: var(--teal); border: 1px solid var(--teal); }
+  .status.progress { color: var(--copper); border: 1px solid var(--copper); }
+  .status.prototype { color: var(--muted); border: 1px solid var(--muted); }
+
+  .project-desc {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+  }
+
+  .tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--teal);
+    background: var(--surface-hi);
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 16px;
+  }
+  .project-links a {
+    font-size: 13px;
+    color: var(--copper);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .project-links a:hover { text-decoration: underline; }
+
+  /* ---------- footer ---------- */
+  footer {
+    padding-top: 56px;
+    border-top: 1px solid var(--line);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer a { color: var(--teal); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 600px) {
+    .trace { display: none; }
+    .wrap { padding: 0 20px 60px 20px; }
+    section::before { display: none; }
+    h1 { font-size: 1.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="trace"></div>
+
+<div class="wrap">
+
+  <!-- ===================== HEADER ===================== -->
+  <header>
+    <div class="eyebrow">EE student / power systems & hardware</div>
+    <h1>Kenneth Yeung</h1>
+    <p class="tagline">
+      Undergraduate electrical engineering student interested in power
+      electronics and field-deployable hardware. This page collects
+      projects, coursework, and code as I build toward more
+      independent design work.
+    </p>
+    <div class="links">
+      <a href="https://github.com/kennethyeung7439" target="_blank">GitHub</a>
+      <a href="mailto:kyeung739@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/kenneth-yeung-574329330/" target="_blank">LinkedIn</a>
+      <a href="resume.pdf" target="_blank" rel="noopener noreferrer">Resume (PDF)</a>
+    </div>
+  </header>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section class="about">
+    <div class="section-label">01 — About</div>
+    <h2>What I'm working on</h2>
+    <p>
+      I'm currently studying electrical engineering and focusing on
+      [power engineering, embedded systems, circuit design]. Most of the projects 
+      below come out of coursework, but I'm working toward more independent builds.
+    </p>
+    <p>
+      I'm especially interested in field-deployable
+      power hardware, and I'm using these projects to build toward that —
+      learning the tools one project at a time.
+    </p>
+  </section>
+
+  <!-- ===================== PROJECTS ===================== -->
+  <section class="projects">
+    <div class="section-label">02 — Projects</div>
+    <h2>Selected work</h2>
+
+    <!-- Project card template — copy this block for each project -->
+    <div class="project">
+      <div class="project-head">
+        <div class="project-title">Autonomous Line-Following Robot</div>
+        <div class="status complete">Hardware / Nov 2025</div>
+      </div>
+      <div class="project-desc">
+        Designed and built an Arduino-based line-following robot capable of autonomous 
+        navigation. Implemented a PID control algorithm with potentiometers for real-time
+        tuning of PID gains, and soldered and integrated photoresistors, LEDs, and motors 
+        for line detection and path correction. Designed and 3D-printed the chassis in 
+        Onshape to house all components. Placed 2nd overall across a set of evaluation 
+        events, including a drag race, frequency sweep, and loop course.
+      </div>
+      <div class="tags">
+        <span class="tag">Embedded C/C++</span>
+        <span class="tag">Microcontroller</span>
+        <span class="tag">Sensors & Motor Control</span>
+      </div>
+      <div class="project-links">
+        <a href="https://sites.google.com/d/11Pajdvz0U7FNn2T32WBxV21bY9hFWi9e/p/1t_oFYysqr7uO_Y2OCIUWDl8QfvDBUXZq/edit" target="_blank">Project Writeup →</a>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <div class="project-title">Hangman Simulation</div>
+        <div class="status complete">Software / May 2023</div>
+      </div>
+      <div class="project-desc">
+        An implementation of Hangman built in C++ using
+        CLion. Used as a starting project to get comfortable with the CLion 
+        IDE, basic C++ program  structure, and a real terminal-based 
+        development workflow.
+      </div>
+      <div class="tags">
+        <span class="tag">C++</span>
+        <span class="tag">CLion</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/kennethyeung7439/Hangman-Project" target="_blank">View Repo →</a>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-head">
+        <div class="project-title">Viterbi Decoder</div>
+        <div class="status complete">Algorithm / Mar 2026</div>
+      </div>
+      <div class="project-desc">
+        Implemented the Viterbi algorithm to decode convolutionally
+        encoded data, working through the trellis structure, path
+        metrics, and backtracking needed to recover the most likely
+        transmitted sequence from a noisy received signal. Verified
+        correctness by comparing decoded output against known encoded
+        sequences.
+      </div>
+      <div class="tags">
+        <span class="tag">Digital Communications</span>
+        <span class="tag">Algorithms</span>
+        <span class="tag">System Verilog</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/kennethyeung7439/Viterbi-Decoder" target="_blank">View Code →</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <footer>
+    Last updated [June 2026] · Built with HTML & CSS, hosted on
+    <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>
+  </footer>
+
+</div>
+
+</body>
+</html>
